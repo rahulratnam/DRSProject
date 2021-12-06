@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36.733" height="38" viewBox="0 0 36.733 38">
+  <g id="home_house" transform="translate(-2 -1)">
+    <g id="Group_1061" data-name="Group 1061" transform="translate(2 1)">
+      <g id="XMLID_4257_" transform="translate(22.8)">
+        <g id="XMLID_4258_">
+          <g id="XMLID_4259_">
+            <g id="XMLID_4260_">
+              <g id="XMLID_841_">
+                <path id="Path_7226" data-name="Path 7226" d="M24.433,8.6a.634.634,0,0,1-.633-.633v-5.7H21.267v1.9a.633.633,0,0,1-1.267,0V1.633A.634.634,0,0,1,20.633,1h3.8a.634.634,0,0,1,.633.633V7.967A.634.634,0,0,1,24.433,8.6Z" transform="translate(-20 -1)" fill="#263238"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+      <g id="XMLID_4279_" transform="translate(0 0.009)">
+        <path id="Path_7227" data-name="Path 7227" d="M33.033,39H6.433a.634.634,0,0,1-.633-.633V20H2.633a.634.634,0,0,1-.456-1.073l17.1-17.733a.654.654,0,0,1,.912,0l17.1,17.733A.634.634,0,0,1,36.833,20H33.667V38.365A.634.634,0,0,1,33.033,39ZM7.067,37.732H32.4V20H17.833a.633.633,0,0,1,0-1.267H35.342L19.733,2.545,4.124,18.732H8.967a.633.633,0,1,1,0,1.267h-1.9Z" transform="translate(-2 -1.007)" fill="#263238"/>
+      </g>
+      <g id="XMLID_4281_" transform="translate(20.267 22.8)">
+        <g id="XMLID_4282_">
+          <g id="XMLID_4283_">
+            <g id="XMLID_4284_">
+              <g id="XMLID_835_">
+                <path id="Path_7228" data-name="Path 7228" d="M24.967,26.6H18.633A.634.634,0,0,1,18,25.967v-3.8a.633.633,0,1,1,1.267,0v3.167h5.067V20.267h-5.7a.633.633,0,0,1,0-1.267h6.333a.634.634,0,0,1,.633.633v6.333A.634.634,0,0,1,24.967,26.6Z" transform="translate(-18 -19)" fill="#263238"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+      <g id="XMLID_4292_" transform="translate(7.6 22.8)">
+        <path id="Path_7229" data-name="Path 7229" d="M16.233,34.2h-7.6A.634.634,0,0,1,8,33.567V19.633A.634.634,0,0,1,8.633,19h7.6a.634.634,0,0,1,.633.633V33.567A.634.634,0,0,1,16.233,34.2ZM9.267,32.933H15.6V20.267H9.267Z" transform="translate(-8 -19)" fill="#263238"/>
+      </g>
+      <g id="XMLID_829_" transform="translate(12.667 17.741)">
+        <g id="Group_1060" data-name="Group 1060">
+          <g id="Group_1059" data-name="Group 1059">
+            <path id="Path_7230" data-name="Path 7230" d="M12.633,16.265A.649.649,0,0,1,12,15.632a.578.578,0,0,1,.19-.445.627.627,0,0,1,1.077.445.649.649,0,0,1-.633.633Z" transform="translate(-12 -15.006)" fill="#263238"/>
+          </g>
+        </g>
+      </g>
+      <g id="XMLID_4296_" transform="translate(23.433 36.733)">
+        <line id="Line_240" data-name="Line 240" x1="9.5" transform="translate(0.633 0.633)" fill="#e67c73"/>
+        <path id="Path_7231" data-name="Path 7231" d="M30.633,31.267h-9.5a.633.633,0,1,1,0-1.267h9.5a.633.633,0,1,1,0,1.267Z" transform="translate(-20.5 -30)" fill="#263238"/>
+      </g>
+      <g id="XMLID_4295_" transform="translate(12.667 29.133)">
+        <line id="Line_241" data-name="Line 241" y1="1.267" transform="translate(0.633 0.633)" fill="#e67c73"/>
+        <path id="Path_7232" data-name="Path 7232" d="M12.633,26.533A.634.634,0,0,1,12,25.9V24.633a.633.633,0,0,1,1.267,0V25.9A.634.634,0,0,1,12.633,26.533Z" transform="translate(-12 -24)" fill="#263238"/>
+      </g>
+      <g id="XMLID_4294_" transform="translate(15.212 8.878)">
+        <path id="Path_7233" data-name="Path 7233" d="M16.531,13.053a2.522,2.522,0,1,1,2.522-2.522A2.525,2.525,0,0,1,16.531,13.053Zm0-3.777a1.255,1.255,0,1,0,1.255,1.255A1.257,1.257,0,0,0,16.531,9.276Z" transform="translate(-14.009 -8.009)" fill="#263238"/>
+      </g>
+    </g>
+    <g id="XMLID_845_" transform="translate(37.467 37.741)">
+      <g id="Group_1063" data-name="Group 1063">
+        <g id="Group_1062" data-name="Group 1062">
+          <path id="Path_7234" data-name="Path 7234" d="M30.633,31.265a.628.628,0,0,1-.443-1.078.627.627,0,0,1,1.077.445.649.649,0,0,1-.633.633Z" transform="translate(-30 -30.006)" fill="#263238"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
