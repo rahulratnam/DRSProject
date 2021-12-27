@@ -9,8 +9,7 @@ get_header();
 		<div class="row">
 			<div class="col-xl-12 col-md-12 col-12 news-head">
 				<h4>Team DRS </h4>
-				<h3>Ieder contract begint met een goed contact.</h3>
-				<p>Bij DRS werken doorgewinterde specialisten samen met jong talent. Zo blijven we onverminderd fris en hongerig. Al 33 jaar. Gevoel voor vastgoed is wat ons bindt. Altijd scherp, met ons oog op de bal. En dat is een winnende formule. Neem dus vooral contact met ons op als u vandaag al vragen hebt over uw kantoor van morgen. </p>
+				<?php the_content(); ?>
 			</div>
 		</div>
 		
@@ -19,22 +18,22 @@ get_header();
 				<h4>Sorteer op:</h4>
 				<ul class="list-inline">
 					<li class="list-inline-item">
-						<a href="" class="active">Alles</a>
+						<a href="javescript:void(0);" class="active filterPosition" position-name="alles">Alles</a>
 					</li>
 					<li class="list-inline-item">
-						<a href="">Management</a>
+						<a href="javescript:void(0);" class="filterPosition" position-name="management">Management</a>
 					</li>
 					<li class="list-inline-item">
-						<a href="">Makelaars</a>
+						<a href="javescript:void(0);" class="filterPosition" position-name="makelaars">Makelaars</a>
 					</li>
 					<li class="list-inline-item">
-						<a href="">Beleggers</a>
+						<a href="javescript:void(0);" class="filterPosition" position-name="beleggers">Beleggers</a>
 					</li>
 					<li class="list-inline-item">
-						<a href="">Taxaties</a>
+						<a href="javescript:void(0);" class="filterPosition" position-name="taxaties">Taxaties</a>
 					</li>
 					<li class="list-inline-item">
-						<a href="">Binnendienst</a>
+						<a href="javescript:void(0);" class="filterPosition" position-name="binnendienst">Binnendienst</a>
 					</li>
 				</ul>
 			</div>
@@ -45,130 +44,65 @@ get_header();
 <div class="team-sec">
 	<div class="container">
 		<div class="row">
-			<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
+			<?php
+			$postData = get_posts( array(
+				'post_type'      => 'teamdrs',
+				'posts_per_page' => -1,
+				'order'          => 'DESC',
+				'orderby'    	=> 'ID',
+				'post_status'    => 'publish'
+			) );
 			
-				<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
+			if ( $postData ) {
+				foreach ( $postData as $post ) : 
+					setup_postdata( $post );
+					$linkedinUrl = get_field('linkedin_url');
+					$emailAddress = get_field('email_address');
+					$telephoneNumber = get_field('telephone_number');
+					$employeeName = get_field('employee_name');
+					$employeeImage = get_field('employee_image');
+					$employeePosition = get_field('employee_position');
+			?>
+			<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new allTeamMembers emp_<?php echo $employeePosition; ?>">
 				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
+					<img src="<?php echo $employeeImage; ?>" class="img-fluid" alt="">
 					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
+						<h3><?php echo $employeeName; ?></h3>
+						<a href="<?php echo $linkedinUrl; ?>" class="social-icon" target="_blank">
+							<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt="">
+						</a>
+						<p>
+							<a href="mailto:<?php echo $emailAddress; ?>"><?php echo $emailAddress; ?></a><br>
+							<a href="tel:<?php echo str_replace(' ', '', $telephoneNumber); ?>"><?php echo $telephoneNumber; ?></a>
+						</p>
 					</div>
 				</div>
 			</div>
-			
-				<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
-			
-				<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
-				<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
-				<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
-			
-				<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new">
-				<div class="team-box">
-					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/team.jpg" class="img-fluid" alt="">
-					<div class="team-info">
-						<h3>Thomas van der Heijden</h3>
-						<a href="#" class="social-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/linkedin.svg" class="img-fluid" alt=""></a>
-						<p><a href="mailto:thomas@drs.eu">thomas@drs.eu</a><br><a href="tel:06 53 99 9965">06 53 99 9965</a> </p>
-					</div>
-				</div>
-			</div>
+			<?php
+				endforeach;
+				wp_reset_postdata();
+			}
+			?>
 		</div>
 	</div>
 </div>
  
-
-<div class="brand-div">
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-12 brand-img">
-				<ul class="list-inline">
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
 <?php
 get_footer();
 ?>
+
+<script>
+jQuery('document').ready(function(){
+	jQuery('.filterPosition').click(function(){
+		var positionName = jQuery(this).attr('position-name');
+		jQuery('.filterPosition').removeClass('active');
+		jQuery(this).addClass('active');
+		if(positionName == 'alles'){
+			jQuery('.allTeamMembers').show();
+		}else{
+			jQuery('.allTeamMembers').hide();
+			jQuery('.emp_'+positionName).show();
+		}
+	});
+});
+</script>

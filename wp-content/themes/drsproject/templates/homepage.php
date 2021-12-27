@@ -368,31 +368,6 @@ get_header();
 	</div>
 </div>
 
-<div class="brand-div">
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-12 brand-img">
-				<ul class="list-inline">
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-					<li class="list-inline-item">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/brand.png" class="img-fluid" alt="">
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
 <?php
 get_footer();
 ?>
