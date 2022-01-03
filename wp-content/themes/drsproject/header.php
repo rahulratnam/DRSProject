@@ -49,19 +49,29 @@
 							<div class="collapse navbar-collapse nav-mob">
 								<ul class="navbar-nav">
 									<li class="nav-item active">
-										<a class="nav-link" href="/diensten/">Diensten</a>
+										<a class="nav-link" href="/diensten/">
+											<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-keypad.svg" alt=""></div>Diensten
+										</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="/nieuws/">Nieuws</a>
+										<a class="nav-link" href="/nieuws/">
+											<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-newspaper.svg" alt=""></div>Nieuws
+										</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="/team/">Over ons</a>
+										<a class="nav-link" href="/over-ons/">
+											<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-clipboard.svg" alt=""></div>Over ons
+										</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="#">Contact</a>
+										<a class="nav-link contactPage" href="javascript:void(0);">
+											<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-person.svg" alt=""></div>Contact
+										</a>
 									</li>
 									<li class="nav-item about-menu">
-										<a class="nav-link" href="/aanbod/">Aanbod</a>
+										<a class="nav-link" href="/aanbod/">
+											<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-home.svg" alt=""></div> Aanbod
+										</a>
 									</li>
 									<!--      <li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>

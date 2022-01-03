@@ -235,7 +235,7 @@ function drs_property_post() {
 		'supports'			=> array('title', 'editor', 'thumbnail'),
 		'has_archive'		=> true,
 	);
-	register_post_type( 'rwproperties', $args );
+	register_post_type( 'aanbod', $args );
 }
 add_action( 'init', 'drs_property_post' );
 
@@ -248,6 +248,7 @@ function more_post_ajax(){
     $args = [
         'suppress_filters' => true,
         'post_type' => 'post',
+		'post_status'  => 'publish',
         'posts_per_page' => $ppp,
         'offset' => $offset,
     ];
@@ -257,7 +258,7 @@ function more_post_ajax(){
     while ($loop->have_posts()) { $loop->the_post(); 
 		$image = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'full' );
         echo '<div class="col-xl-6 col-md-6 col-12 news-img">
-				<img src="'.$image[0].'" class="img-fluid" alt="" style="height:300px;">
+				<img src="'.$image[0].'" class="img-fluid lazy" alt="" style="height:300px;">
 				<div class="news-box">
 					<h4>'.get_the_title().'</h4>
 					<p>'.get_the_content().'</p>
@@ -271,6 +272,81 @@ function more_post_ajax(){
 
 add_action('wp_ajax_nopriv_more_post_ajax', 'more_post_ajax'); 
 add_action('wp_ajax_more_post_ajax', 'more_post_ajax');
+
+function more_properties_ajax(){
+    $offset = $_POST["offset"];
+    $ppp = $_POST["ppp"];
+
+    header("Content-Type: text/html");
+    $args = [
+        'suppress_filters' => true,
+        'post_type' => 'aanbod',
+		'post_status'  => 'publish',
+        'posts_per_page' => $ppp,
+        'offset' => $offset,
+    ];
+
+    $loop = new WP_Query($args);
+
+    while ($loop->have_posts()) { $loop->the_post(); 
+		$image = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'full' );
+        ?>
+		<div class="col-xl-4 col-lg-4 col-md-6 col-12 product-div">
+			<a href="<?php echo get_the_permalink(); ?>">
+				<div class="product-box">
+					<div class="aanbod-box">
+						<div class="aanbod-img" style="background-image: url('<?php echo $image[0]; ?>" class="img-fluid" alt="<?php the_title(); ?>)"></div>
+					</div>
+					<div class="product-inner">
+						<ul class="list-inline list-div">
+							<li class="list-inline-item">
+								<?php echo get_field('adres'); ?> <?php echo get_field('huisnummer'); ?>
+							</li>
+							<li class="list-inline-item">
+								<?php echo get_field('plaats'); ?>
+							</li>
+						</ul>
+						<ul class="list-inline prod-list">
+							<li class="list-inline-item">
+								<div class="media">
+									<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new.svg" alt="">
+									<div class="media-body">
+										<h3>Oppervlakte</h3>
+										<p><?php echo number_format(get_field('oppervlakte')); ?> m<sup>2</sup></p>
+									</div>
+								</div>
+							</li>
+							<li class="list-inline-item">
+								<div class="media">
+									<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
+									<div class="media-body">
+										<h3>Te huur vanaf</h3>
+										<p><?php echo get_field('in_units_vanaf'); ?> m<sup>2</sup></p>
+									</div>
+								</div>
+							</li>
+							<li class="list-inline-item">
+								<div class="media">
+									<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
+									<div class="media-body">
+										<h3>Huurprijs</h3>
+										<p>€ <?php echo number_format(get_field('huurprijs_excl_btw')); ?>,- per jaar</p>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</a>
+		</div>
+		<?php
+    }
+    exit; 
+}
+
+
+add_action('wp_ajax_nopriv_more_properties_ajax', 'more_properties_ajax'); 
+add_action('wp_ajax_more_properties_ajax', 'more_properties_ajax');
 
 function remoteCURL ($url) {
 	$curl = curl_init();
@@ -305,49 +381,71 @@ function import_properties_data(){
 
 	echo "<br>Bog API Response:";
 	echo '<pre>';
-	//print_r($response_bog_arr);
+	print_r($response_bog_arr);
+	die;
 	
 	$propertiesData = $response_bog_arr->resultaten;
 	
-	/*foreach($propertiesData as $propertyData){
+	foreach($propertiesData as $propertyData){
 		$id = $propertyData->id;
 		$straat = $propertyData->straat;
 		$huisnummer = $propertyData->huisnummer;
 		$postcode = $propertyData->postcode;
-		$plaats = $propertyData->plaats;
+		$plaats = ucfirst(strtolower($propertyData->plaats));
 		
-		$hoofdfunctie = $propertyData->kenmerken->hoofdfunctie;
+		$status = ucfirst(strtolower($propertyData->status));
+		
+		$hoofdfunctie = ucfirst(strtolower($propertyData->kenmerken->hoofdfunctie));
 		
 		$financieelData = $propertyData->financieel->overdracht->koopEnOfHuur;
 		
-		$aanmeldingsreden = $financieelData->aanmeldingsreden;
+		$oppervlakte = $propertyData->object->functies[0]->kantoorruimte->oppervlakte;
+		$unitsVanaf = $propertyData->object->functies[0]->kantoorruimte->unitsVanaf;
+		$aantalVerdiepingen = $propertyData->object->functies[0]->kantoorruimte->aantalVerdiepingen;
+		
+		$gebouwnaam = $propertyData->gebouwdetails->gebouwnaam;
+		$bouwjaar = $propertyData->gebouwdetails->bouwjaar->bouwjaar1;
+		
+		$aanmeldingsreden = ucfirst(strtolower(str_replace('_', ' ', $financieelData->aanmeldingsreden)));
 		$koopprijsvoorvoegsel = $financieelData->koopprijsvoorvoegsel;
 		$koopprijs = $financieelData->koopprijs;
 		$koopconditie = $financieelData->koopconditie;
 		$servicekosten = $financieelData->servicekosten;
-		$servicekostenconditie = $financieelData->servicekostenconditie;
+		$aanvaarding = ucfirst(strtolower(str_replace('_', ' ', $financieelData->aanvaarding)));
+		$aanvaardingsdatum = $financieelData->aanvaardingsdatum;
+		$servicekostenconditie = ucfirst(strtolower(str_replace('_', ' ', $financieelData->servicekostenconditie)));
 		
 		//For rent
-		if($aanmeldingsreden == 'IN_VERHUUR_GENOMEN'){
-			$huurprijsvoorvoegsel = $financieelData->huurprijsvoorvoegsel;
-			$huurprijsTot = $financieelData->huurprijsTot;
-			$verhuurprijsconditie = $propertyData->financieel->overdracht->transactie->verhuurprijsconditie;
-			$servicekosten = $financieelData->servicekosten;
-			$servicekostenconditie = $financieelData->servicekostenconditie;
-		}
+		//if($aanmeldingsreden == 'IN_VERHUUR_GENOMEN'){
+		$huurprijsvoorvoegsel = ucfirst(strtolower(str_replace('_', ' ', $financieelData->huurprijsvoorvoegsel)));
+		$huurprijs = $financieelData->huurprijs;
+		$verhuurprijsconditie = ucfirst(strtolower(str_replace('_', ' ', $propertyData->financieel->overdracht->transactie->verhuurprijsconditie)));
+		//}
 		
 		$aanbiedingstekst = $propertyData->teksten->aanbiedingstekst;
 		$accountmanager = $propertyData->relaties->accountmanager;
 		
 		
+		
 		$post_data = array(
-			'post_title'    => $straat.' '.$huisnummer,
+			'post_title'    => $straat . ' ' . $huisnummer . ' ' . $plaats,
 			'post_content'  => $aanbiedingstekst,
-			'post_type'     => 'rwproperties',
+			'post_type'     => 'aanbod',
 			'post_status'   => 'publish'
 		);
 		
 		$post_id = wp_insert_post( $post_data );
+		
+		$mimetype = $propertyData->media[0]->mimetype;
+		$file_temp = $propertyData->media[0]->link;
+		$fileName  = explode('/media.objectmedia/', $file_temp);
+		$fileName  = explode('.', $fileName[1]);
+		$fileExt  = explode('?', $fileName[1]);
+		
+		$file_name = strtolower($straat).time().'.'.$fileExt[0];
+		$fileTemp = $file_temp . '&resize=4';
+		
+		storeImages($fileTemp, $file_name, $mimetype, $post_id);
 
 		update_field( 'rw_property_id', $id, $post_id );
 		
@@ -358,12 +456,14 @@ function import_properties_data(){
 		//update_field( 'wijk', '', $post_id );
 		
 		update_field( 'hoofdfunctie', $hoofdfunctie, $post_id );
-		update_field( 'status', '', $post_id );
+		update_field( 'status', $status, $post_id );
+		update_field( 'aanvaarding', $aanvaarding, $post_id );
+		update_field( 'aanvaardingsdatum', $aanvaardingsdatum, $post_id );
 		update_field( 'beschikbaar', '', $post_id );
-		update_field( 'oppervlakte', '', $post_id );
-		update_field( 'in_units_vanaf', '', $post_id );
-		update_field( 'aantal_verdiepingen', '', $post_id );
-		update_field( 'naam_gebouw', '', $post_id );
+		update_field( 'oppervlakte', $oppervlakte, $post_id );
+		update_field( 'in_units_vanaf', $unitsVanaf, $post_id );
+		update_field( 'aantal_verdiepingen', $aantalVerdiepingen, $post_id );
+		update_field( 'naam_gebouw', $gebouwnaam, $post_id );
 		update_field( 'bouwjaar', '', $post_id );
 		
 		update_field( 'accountmanager', $accountmanager, $post_id );
@@ -376,26 +476,48 @@ function import_properties_data(){
 		//update_field( 'aanbiedingstekst', $aanbiedingstekst, $post_id );
 		//update_field( 'andere_fotos', '', $post_id );
 		
-		update_field( 'aanmelding_verkoop', $aanmeldingsreden, $post_id );
+		update_field( 'aanmelding_verkoop_verhuur', $aanmeldingsreden, $post_id );
 		update_field( 'transactie_status', '', $post_id );
 		update_field( 'voor_koop', $koopprijsvoorvoegsel, $post_id );
 		update_field( 'koopsom_excl_btw', $koopprijs, $post_id );
 		update_field( 'conditie_koopsom', $koopconditie, $post_id );
-		update_field( 'servicekosten_sold', $servicekosten, $post_id );
+		update_field( 'servicekosten', $servicekosten, $post_id );
 		update_field( 'conditie_servicekosten_sold', $servicekostenconditie, $post_id );
-		update_field( 'aanmelding_verhuur', $aanmeldingsreden, $post_id );
 		update_field( 'voor_huur', $huurprijsvoorvoegsel, $post_id );
-		update_field( 'huurprijs_excl_btw', $huurprijsTot, $post_id );
+		update_field( 'huurprijs_excl_btw', $huurprijs, $post_id );
 		update_field( 'conditie_huurprijs', $verhuurprijsconditie, $post_id );
-		update_field( 'servicekosten_rent', $servicekosten, $post_id );
 		update_field( 'conditie_servicekosten_rent', $servicekostenconditie, $post_id );
-		
-		//echo $post_id. ' <br>';
-	}*/
-	
+	}
 	die;
-	
 }
 
 add_action('wp_ajax_nopriv_import_properties_data', 'import_properties_data'); 
 add_action('wp_ajax_import_properties_data', 'import_properties_data');
+
+
+function storeImages($file_temp, $filename, $mimetype, $post_id){
+	$upload_dir = wp_upload_dir();
+	$image_data = file_get_contents( $file_temp );
+
+	if ( wp_mkdir_p( $upload_dir['path'] ) ) {
+	  $file = $upload_dir['path'] . '/' . $filename;
+	}
+	else {
+	  $file = $upload_dir['basedir'] . '/' . $filename;
+	}
+
+	file_put_contents( $file, $image_data );
+	
+	$attachment = array(
+	  'post_mime_type' => $mimetype,
+	  'post_title' => sanitize_file_name( $filename ),
+	  'post_content' => '',
+	  'post_status' => 'inherit'
+	);
+
+	$attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+	require_once( ABSPATH . 'wp-admin/includes/image.php' );
+	$attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+	wp_update_attachment_metadata( $attach_id, $attach_data );
+	set_post_thumbnail( $post_id, $attach_id );
+}
