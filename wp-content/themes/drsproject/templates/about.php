@@ -49,7 +49,7 @@ get_header();
 	</div>
 </div>
 
-<div class="content-main">
+<div class="content-main content-about-intro">
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-6 col-md-6 col-12 left-img">
@@ -100,7 +100,7 @@ get_header();
 						<div class="media-body">
 							<h3>Diensten van DRS</h3>
 							<p>In uw nieuwe kantoor wilt u optimaal kunnen samenwerken in een natuurlijke en gezonde omgeving. Dat vereist maatwerk, creativiteit en ongeëvenaarde kennis van de markt. Laat dat nou precies zijn wat DRS u zonder gelijken kan bieden. Wij zijn vandaag al klaar voor uw kantoor van morgen.</p>
-							<a href="/diensten/" class="btn-clr">diensten van drs <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
+							<a href="/diensten/" class="btn-clr">diensten van DRS <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
 						</div>
 					</div>
 				</div>
@@ -129,7 +129,7 @@ get_header();
 				<h3>Gevoel voor vastgoed</h3>
 			</div>
 			<div class="col-xl-6 col-md-6 col-12 news-btn">
-				<a href="/team/" class="btn-clr">bekijk het hele team <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
+				<a href="/over-ons/team/" class="btn-clr">bekijk het hele team <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
 			</div>
 		</div>
 		<div class="row">
@@ -151,10 +151,24 @@ get_header();
 					$employeeName = get_field('employee_name');
 					$employeeImage = get_field('employee_image');
 					$employeePosition = get_field('employee_position');
+					$employeeTitle = get_field('employee_title');
+					$employeeInfo = get_field('employee_info');
+
+					$posCls = '';
+					foreach ($employeePosition as $epData) {
+						$posCls .= ' emp_' . $epData;
+					}
 			?>
-					<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new allTeamMembers emp_<?php echo $employeePosition; ?>">
+					<div class="col-xl-4 col-lg-4 col-md-4 col-12 team-new allTeamMembers <?php echo $posCls; ?>">
 						<div class="team-box">
-							<img src="<?php echo $employeeImage; ?>" class="img-fluid" alt="">
+							<div class="team-image">
+								<img src="<?php echo $employeeImage; ?>" class="img-fluid" alt="">
+								<div class="team-hover">
+									<div class="member-name"><?php echo $employeeName; ?></div>
+									<div class="member-title"><?php echo $employeeTitle; ?></div>
+									<div class="member-info"><?php echo $employeeInfo; ?></div>
+								</div>
+							</div>
 							<div class="team-info">
 								<h3><?php echo $employeeName; ?></h3>
 								<a href="<?php echo $linkedinUrl; ?>" class="social-icon" target="_blank">
@@ -173,6 +187,7 @@ get_header();
 			}
 			?>
 		</div>
+		<a href="/over-ons/team/" class="btn-clr btn-team btn-mobile">bekijk het hele team <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
 	</div>
 </div>
 

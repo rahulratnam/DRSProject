@@ -2,14 +2,35 @@
 /* Template Name: Newspage */
 
 get_header();
+
+$args = [
+		'post_type' => 'post',
+		'post_status'  => 'publish',
+		'order'          => 'DESC',
+		'orderby'    	=> 'publish',
+		'posts_per_page' => 1
+	];
+
+	$loop = new WP_Query($args);
+
+	while ($loop->have_posts()) {
+		$loop->the_post();
+		
+		$image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'full');
+		if (has_post_thumbnail()) {
+			$imageFile = $image[0];
+		} else { 
+			$imageFile = get_stylesheet_directory_uri().'/images/placeholder-drs.webp';
+		}
+						
 ?>
 
 <div class="property-head news-title">
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-12 col-md-12 col-12 news-head">
-				<h4>22 september 2021</h4>
-				<h3 class="featureTitle">Gorillas huurt 200 m² aan de Jacob Bontiusplaats 9, Amsterdam</h3>
+				<h4 class="postDate"><?php echo get_the_date( 'd F Y' ); ?></h4>
+				<h3 class="featureTitle"><?php the_title(); ?></h3>
 			</div>
 		</div>
 	</div>
@@ -18,26 +39,28 @@ get_header();
 <div class="news-bg">
 	<div class="container-fluid">
 		<div class="row">
-			<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/new-bg.jpg" alt="" class="img-fluid featureImage">
+			<img src="<?php echo $imageFile; ?>" alt="" class="img-fluid featureImage">
 		</div>
 	</div>
 
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-12 col-md-12 col-12 news-para featureContent">
-				<p>DRS Makelaars heeft ca. 200 m² aan de Jacob Bontiusplaats 9 te Amsterdam verhuurd.<br>
-					Hiermee hebben we onze tweede transactie met Gorillas voltooid. Gefeliciteerd en succes met jullie nieuwe locatie in het INIT gebouw!</p>
-				<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. </p>
+				<p><?php the_content(); ?></p>
 			</div>
 		</div>
 	</div>
 </div>
+<?php
+	wp_reset_postdata();
+}
+?>
 
 <div class="news-div news-main">
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-12 col-md-12 col-12 news-head">
-				<p>Highlights van Drs</p>
+				<p>Highlights van DRS</p>
 				<h3>Andere nieuwsberichten </h3>
 			</div>
 		</div>
@@ -47,10 +70,11 @@ get_header();
 
 			$postData = get_posts(array(
 				'post_type'      => 'post',
-				'posts_per_page' => 2,
+				'posts_per_page' => 4,
 				'order'          => 'DESC',
-				'orderby'    	=> 'ID',
-				'post_status'    => 'publish'
+				'orderby'    	=> 'publish',
+				'post_status'    => 'publish',
+				'offset' => 1,
 			));
 
 			if ($postData) {
@@ -59,11 +83,21 @@ get_header();
 					$image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
 			?>
 					<div class="col-xl-6 col-md-6 col-12 news-img">
-						<img src="<?php echo $image[0]; ?>" class="img-fluid" alt="" style="height:300px;width:100%;object-fit: cover;">
+
+						<?php if (has_post_thumbnail()) {
+							the_post_thumbnail('full', array('class'  => 'main-img'));
+							$imageFile = $image[0];
+						} else { 
+							$imageFile = get_stylesheet_directory_uri().'/images/placeholder-drs.webp';
+						?>
+							<img class="main-img" src="<?php echo get_stylesheet_directory_uri(); ?>/images/placeholder-drs.webp" alt="">
+						<?php } ?>
+
+						<!-- <img class="main-img" src="<?php echo $image[0]; ?>" class="img-fluid" alt=""> -->
 						<div class="news-box">
 							<h4><?php the_title(); ?></h4>
-							<p><?php the_content(); ?></p>
-							<a href="void:javascript(0);" class="btn-clr readMoreData" data-title="<?php the_title(); ?>" data-content="<?php the_content(); ?>" data-image="<?php echo $image[0]; ?>">verder lezen <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
+							<p><?php echo get_field('short-description'); ?></p>
+							<a href="javascript:void(0);" class="btn-clr readMoreData" id="post_id_<?php echo $post->ID; ?>" data-title="<?php the_title(); ?>" data-content="<?php the_content(); ?>" data-date="<?php echo get_the_date( 'd F Y' ); ?>" data-image="<?php echo $imageFile; ?>">verder lezen <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
 						</div>
 					</div>
 			<?php
@@ -107,19 +141,27 @@ get_footer();
 	window.addEventListener("resize", lazyload);
 	window.addEventListener("orientationChange", lazyload);*/
 
+	<?php if ($_GET['post_id'] != '') { ?>
+		setTimeout(function() {
+			jQuery("#post_id_<?php echo $_GET['post_id']; ?>").click();
+		}, 1000);
+	<?php } ?>
+
 
 	jQuery(document).ready(function($) {
 		jQuery('body').on('click', '.readMoreData', function() {
 			var title = jQuery(this).attr('data-title');
 			var content = jQuery(this).attr('data-content');
 			var image = jQuery(this).attr('data-image');
+			var postDate = jQuery(this).attr('data-date');
 
 			jQuery('.featureTitle').html(title);
 			jQuery('.featureContent').html(content);
+			jQuery('.postDate').html(postDate);
 			jQuery('.featureImage').attr('src', image);
 
 			jQuery('html,body').animate({
-				scrollTop: jQuery(".featureTitle").offset().top - 100
+				scrollTop: jQuery(".featureTitle").offset().top - 200
 			}, 'slow');
 		});
 
@@ -128,14 +170,14 @@ get_footer();
 		// What page we are on.
 		var page = 1;
 		// Post per page
-		var ppp = 2;
+		var ppp = 4;
 
 		var busy = false;
 
 		jQuery("#more_posts").on("click", function() {
 			// When btn is pressed.
 			jQuery("#more_posts").attr("disabled", true);
-			var offset = (page * ppp);
+			var offset = (page * ppp) + 1;
 
 			var str = '&offset=' + offset + '&ppp=' + ppp + '&action=more_post_ajax';
 			jQuery.ajax({

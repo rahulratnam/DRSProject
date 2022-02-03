@@ -8,10 +8,21 @@ get_header();
 	<div class=" container-fluid">
 		<div class="row">
 			<div class="col-xl-12 col-md-12 col-12 slider-div">
+				<div class="owl-carousel owl-theme" id="slider">
+					<div class="item">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/amsterdam-centrum-drs.webp" alt="" loading="lazy">
+					</div>
+					<div class="item">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/drs-kantoor-amstel.webp" alt="" loading="lazy">
+					</div>
+					<div class="item">
+						<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/amsterdam-museumplein-drs.webp" alt="" loading="lazy">
+					</div>
+				</div>
 				<div class="banner">
-					<video id="header-video" width="100%" autoplay="" loop="" muted="" playsinline="" class=" lazyloaded" preload="none">
-						<!-- <source src="<?php echo get_stylesheet_directory_uri(); ?>/video/drs-video.mp4" type="video/mp4"> -->
-						<source src="<?php echo get_stylesheet_directory_uri(); ?>/video/drs-video.webm" type="video/webm">
+					<video id="header-video" width="100%" autoplay loop muted playsinline poster="" preload="none">
+						<source src="<?php echo get_stylesheet_directory_uri(); ?>/video/drs-video-wereldspeler.webm" type="video/webm">
+						<source src="<?php echo get_stylesheet_directory_uri(); ?>/video/drs-video-wereldspeler.mp4" type="video/mp4">
 					</video>
 					<div class="container">
 						<div class="banner-caption">
@@ -62,7 +73,7 @@ get_header();
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-5 col-md-5 col-12 left-img">
-				<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/amsterdam-centrum-pand-drs.webp" class="img-fluid" alt="">
+				<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/mondriaan-toren-water-groen.webp" class="img-fluid" alt="Mondriaantoren water groen.webp">
 			</div>
 			<div class="col-xl-7 col-md-7 col-12 right-info">
 				<div class="infor-right">
@@ -96,7 +107,7 @@ get_header();
 				'post_type'      => 'post',
 				'posts_per_page' => 2,
 				'order'          => 'DESC',
-				'orderby'    	=> 'rand',
+				'orderby'    	=> 'publish',
 				'post_status'    => 'publish'
 			));
 
@@ -106,11 +117,16 @@ get_header();
 					$image = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'full');
 			?>
 					<div class="col-xl-6 col-md-6 col-12 news-img">
-						<img src="<?php echo $image[0]; ?>" class="img-fluid" alt="<?php the_title(); ?>" style="height:300px;width:100%;object-fit: cover;">
+						<?php if (has_post_thumbnail()) {
+							the_post_thumbnail('full', array('class'  => 'main-img'));
+						} else {
+						?>
+							<img class="main-img" src="<?php echo get_stylesheet_directory_uri(); ?>/images/placeholder-drs.webp" alt="">
+						<?php } ?>
 						<div class="news-box">
 							<h4><?php the_title(); ?></h4>
-							<p><?php the_content(); ?></p>
-							<a href="" class="btn-clr">verder lezen <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
+							<p><?php echo get_field('short-description'); ?></p>
+							<a href="/nieuws/?post_id=<?php echo $post->ID; ?>" class="btn-clr">verder lezen <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
 						</div>
 					</div>
 			<?php
@@ -167,12 +183,12 @@ get_header();
 </div> -->
 
 <div class="drs-div bg-grey">
-	<div class="container">
+	<div class="container container-small">
 		<div class="row">
 			<div class="col-xl-6 col-md-6 col-12 drs-left">
 				<div class="heading-div">
-					<p>Drs makelaars </p>
-					<h3>De diverse diensten van DRS</h3>
+					<p>DRS makelaars </p>
+					<h3>Services en diensten van DRS</h3>
 				</div>
 
 				<div class="media">
@@ -215,6 +231,7 @@ get_header();
 					</div>
 				</div>
 			</div>
+			<a href="/diensten/" class="btn-clr btn-services btn-mobile">bekijk alle diensten <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/clr-arrow.svg" alt=""></a>
 		</div>
 	</div>
 </div>
@@ -222,7 +239,7 @@ get_header();
 <div class="inner-img">
 	<div class="container">
 		<div class="row">
-			<div class="col-xl-12 col-md-12 col-12">
+			<div class="col-xl-12 col-md-12 col-12 single-img">
 				<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/binnenkant-pand-drs.webp" class="img-fluid" alt="">
 			</div>
 		</div>
@@ -261,7 +278,7 @@ get_header();
 					<a href="<?php echo get_the_permalink(); ?>">
 						<div class="product-box">
 							<div class="aanbod-box">
-								<div class="aanbod-img" style="background-image: url('<?php echo $image[0]; ?>" class="img-fluid" alt="<?php the_title(); ?>)"></div>
+							<div class="aanbod-img" style="background-image: url('<?php echo $image[0]; ?>')" class="img-fluid"; alt="<?php the_title(); ?>"></div>
 							</div>
 							<div class="product-inner">
 								<ul class="list-inline list-div">
@@ -278,30 +295,53 @@ get_header();
 											<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new.svg" alt="">
 											<div class="media-body">
 												<h3>Oppervlakte</h3>
-												<p><?php echo number_format(get_field('oppervlakte')); ?> m<sup>2</sup></p>
+												<p><?php echo euroNumberFormat(get_field('oppervlakte')); ?> m<sup>2</sup></p>
 											</div>
 										</div>
 									</li>
-									<li class="list-inline-item">
-										<div class="media">
-											<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
-											<div class="media-body">
-												<h3>Te huur vanaf</h3>
-												<p><?php echo get_field('in_units_vanaf'); ?> m<sup>2</sup></p>
+									<?php if (get_field('aanmelding_verkoop_verhuur') == 'In verhuur genomen') { ?>
+										<li class="list-inline-item">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
+												<div class="media-body">
+													<h3>Te huur vanaf</h3>
+													<p><?php echo euroNumberFormat(get_field('in_units_vanaf')); ?> m<sup>2</sup></p>
+												</div>
 											</div>
-										</div>
-									</li>
-									<li class="list-inline-item">
-										<div class="media">
-											<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
-											<div class="media-body">
-												<h3>Huurprijs</h3>
-												<p>€ <?php echo number_format(get_field('huurprijs_excl_btw')); ?>,- per jaar</p>
+										</li>
+									<?php } else { ?>
+										<li class="list-inline-item">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
+												<div class="media-body">
+													<h3>Te koop vanaf</h3>
+													<p><?php echo euroNumberFormat(get_field('in_units_vanaf')); ?> m<sup>2</sup></p>
+												</div>
 											</div>
-										</div>
-									</li>
+										</li>
+									<?php } ?>
+									<?php if (get_field('aanmelding_verkoop_verhuur') == 'In verhuur genomen') { ?>
+										<li class="list-inline-item item-last">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
+												<div class="media-body">
+													<h3>Huurprijs</h3>
+													<p>€ <?php echo number_format(get_field('huurprijs_excl_btw'), 0, ',', '.'); ?> - <?php echo callSubText(get_field('conditie_huurprijs')); ?></p>
+												</div>
+											</div>
+										</li>
+									<?php } else { ?>
+										<li class="list-inline-item item-last">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
+												<div class="media-body">
+													<h3>Koopsom</h3>
+													<p>€ <?php echo number_format(get_field('koopsom_excl_btw'), 0, ',', '.'); ?> - <?php echo callSubText(get_field('conditie_koopsom')); ?></p>
+												</div>
+											</div>
+										</li>
+									<?php } ?>
 								</ul>
-
 							</div>
 						</div>
 					</a>

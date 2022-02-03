@@ -90,10 +90,21 @@
 										<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-clipboard.svg" alt=""></div>Over Ons
 									</a>
 								</li>
+								<li>
+									<a href="/over-ons/team/">
+										<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/ftr-person.svg" alt=""></div>Team
+									</a>
+								</li>
+								<li>
+									<a href="/contact/">
+										<div class="menu-icon"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/gebouwnaam-icon-drs-wit.svg" alt=""></div>Contact
+									</a>
+								</li>
 							</ul>
 						</div>
 						<div class="col-xl-8 col-lg-8 col-md-8 col-12 form-div">
-							<?php echo do_shortcode('[contact-form-7 id="929" title="Contactformulier"]'); ?>
+							<h3>Contact mij</h3>
+							<?php echo do_shortcode('[gravityform id="2" title="false" description="false" ajax="true"]'); ?>
 						</div>
 					</div>
 				</div>
@@ -101,7 +112,7 @@
 				<div class="copyright-div">
 					<ul class="list-inline">
 						<li class="list-inline-item">
-							2021 © DRS
+							2022 © DRS
 						</li>
 						<li class="list-inline-item">
 							<a href="/algemene-voorwaarden/">Algemene voorwaarden</a>
@@ -123,9 +134,11 @@
 </div>
 </div>
 
-<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/jquery-3.2.1.slim.min.js"></script>
-<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script data-cookieconsent="ignore" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script data-cookieconsent="ignore" src="<?php echo get_stylesheet_directory_uri(); ?>/js/jquery-3.2.1.slim.min.js"></script>
+<script data-cookieconsent="ignore" src="<?php echo get_stylesheet_directory_uri(); ?>/js/bootstrap.min.js"></script>
+<script data-cookieconsent="ignore" src="<?php echo get_stylesheet_directory_uri(); ?>/js/owl.carousel.min.js"></script>
+
 <script>
 	$(document).ready(function() {
 		jQuery("#mobilenav-btn").click(function() {
@@ -148,7 +161,41 @@
 					'html, body').get(0).scrollHeight
 			}, 2000);
 		});
+
+		/*jQuery(window).scroll(function(){
+			var sticky = jQuery('.header'),
+			scroll = jQuery(window).scrollTop();
+
+			if (scroll >= 100) sticky.addClass('sticky');
+			else sticky.removeClass('sticky');
+		});*/
 	});
+</script>
+
+<script data-cookieconsent="ignore">
+	jQuery('#slider').owlCarousel({
+		loop: true,
+		margin: 10,
+		dots: false,
+		responsiveClass: true,
+		autoplay: true,
+		autoplayTimeout: 5000,
+		responsive: {
+			0: {
+				items: 1,
+				nav: true
+			},
+			600: {
+				items: 1,
+				nav: false
+			},
+			1000: {
+				items: 1,
+				nav: true,
+				loop: false
+			}
+		}
+	})
 </script>
 
 <?php wp_footer(); ?>

@@ -22,9 +22,9 @@ get_header();
 			<div class="col-xl-4 col-md-4 col-12 filter-search">
 				<div class="custom-search-input">
 					<div class="input-group">
-						<input type="text" class="  search-query form-control" placeholder="Zoek op straatnaam" />
+						<input type="text" class="search-query form-control" id="search_property" placeholder="Zoek op stad of straatnaam" />
 						<span class="input-group-btn">
-							<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/filter-search.svg" class="img-fluid" alt="">
+							<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/filter-search.svg" class="img-fluid" id="search_results" alt="">
 						</span>
 					</div>
 				</div>
@@ -39,7 +39,7 @@ get_header();
 						$count_pages = wp_count_posts($post_type = 'aanbod');
 						$published_posts = $count_pages->publish;
 						?>
-						Totaal: <?php echo $published_posts; ?> panden
+						Totaal: <span class="totalPropertiesNo"><?php echo $published_posts; ?></span> panden
 					</li>
 				</ul>
 			</div>
@@ -60,10 +60,10 @@ get_header();
 
 			?>
 				<div class="col-xl-4 col-lg-4 col-md-6 col-12 product-div">
-					<a href="<?php echo get_the_permalink(); ?>">
+					<a href="<?php echo get_the_permalink(); ?>" target="_blank">
 						<div class="product-box">
 							<div class="aanbod-box">
-								<div class="aanbod-img" style="background-image: url('<?php echo $image[0]; ?>" class="img-fluid" alt="<?php the_title(); ?>)"></div>
+							<div class="aanbod-img" style="background-image: url('<?php echo $image[0]; ?>')" class="img-fluid"; alt="<?php the_title(); ?>"></div>
 							</div>
 							<div class="product-inner">
 								<ul class="list-inline list-div">
@@ -80,28 +80,52 @@ get_header();
 											<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new.svg" alt="">
 											<div class="media-body">
 												<h3>Oppervlakte</h3>
-												<p><?php echo number_format(get_field('oppervlakte')); ?> m<sup>2</sup></p>
+												<p><?php echo euroNumberFormat(get_field('oppervlakte')); ?> m<sup>2</sup></p>
 											</div>
 										</div>
 									</li>
-									<li class="list-inline-item">
-										<div class="media">
-											<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
-											<div class="media-body">
-												<h3>Te huur vanaf</h3>
-												<p><?php echo get_field('in_units_vanaf'); ?> m<sup>2</sup></p>
+									<?php if (get_field('aanmelding_verkoop_verhuur') == 'In verhuur genomen') { ?>
+										<li class="list-inline-item">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
+												<div class="media-body">
+													<h3>Te huur vanaf</h3>
+													<p><?php echo euroNumberFormat(get_field('in_units_vanaf')); ?> m<sup>2</sup></p>
+												</div>
 											</div>
-										</div>
-									</li>
-									<li class="list-inline-item">
-										<div class="media">
-											<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
-											<div class="media-body">
-												<h3>Huurprijs</h3>
-												<p>€ <?php echo number_format(get_field('huurprijs_excl_btw')); ?>,- per jaar</p>
+										</li>
+									<?php } else { ?>
+										<li class="list-inline-item">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/icon-new2.svg" alt="">
+												<div class="media-body">
+													<h3>Te koop vanaf</h3>
+													<p><?php echo euroNumberFormat(get_field('in_units_vanaf')); ?> m<sup>2</sup></p>
+												</div>
 											</div>
-										</div>
-									</li>
+										</li>
+									<?php } ?>
+									<?php if (get_field('aanmelding_verkoop_verhuur') == 'In verhuur genomen') { ?>
+										<li class="list-inline-item item-last">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
+												<div class="media-body">
+													<h3>Huurprijs</h3>
+													<p>€ <?php echo number_format(get_field('huurprijs_excl_btw'), 0, ',', '.'); ?> - <?php echo callSubText(get_field('conditie_huurprijs')); ?></p>
+												</div>
+											</div>
+										</li>
+									<?php } else { ?>
+										<li class="list-inline-item item-last">
+											<div class="media">
+												<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/huurprijs-label.svg" alt="">
+												<div class="media-body">
+													<h3>Koopsom</h3>
+													<p>€ <?php echo number_format(get_field('koopsom_excl_btw'), 0, ',', '.'); ?> - <?php echo callSubText(get_field('conditie_koopsom')); ?></p>
+												</div>
+											</div>
+										</li>
+									<?php } ?>
 								</ul>
 							</div>
 						</div>
@@ -121,7 +145,7 @@ get_header();
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-body">
-				<button type="button" class="close-btn" data-dismiss="modal"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/close.png" alt=""> Close</button>
+				<button type="button" class="close-btn" data-dismiss="modal"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/close.png" alt=""> &nbsp; Sluiten</button>
 				<div class="filter-main">
 					<img src="<?php echo get_stylesheet_directory_uri(); ?>/images/filter.svg" class="img-fluid" alt="">
 					<p>AANDBOD</p>
@@ -131,10 +155,10 @@ get_header();
 						<h3>Vloeroppervlakte (m<sup>2</sup>)</h3>
 						<form class="form-inline">
 							<div class="form-group">
-								<input type="text" class="min-input" placeholder="min">
+								<input type="text" class="min-input" name="min_vloer" id="min_vloer" placeholder="min">
 							</div>
 							<div class="form-group">
-								<input type="text" class="max-input" placeholder="max">
+								<input type="text" class="max-input" name="max_vloer" id="max_vloer" placeholder="max">
 							</div>
 						</form>
 					</div>
@@ -144,25 +168,25 @@ get_header();
 						<form class="form-inline">
 							<div class="input-checkbox">
 								<label class="checkbox-cont">
-									<input type="checkbox">
+									<input type="radio" name="aanbod_type" value="huur">
 									<span class="checkmark"></span>
 									<span>Huur</span>
 								</label>
 							</div>
 							<div class="input-checkbox">
 								<label class="checkbox-cont">
-									<input type="checkbox">
+									<input type="radio" name="aanbod_type" value="koop">
 									<span class="checkmark"></span>
-									<span>Koap</span>
+									<span>Koop</span>
 								</label>
 							</div>
-							<div class="input-checkbox">
+							<!--<div class="input-checkbox">
 								<label class="checkbox-cont">
-									<input type="checkbox">
+									<input type="radio" name="aanbod_type" value="belegging">
 									<span class="checkmark"></span>
-									<span>Belogging</span>
+									<span>Belegging</span>
 								</label>
-							</div>
+							</div> -->
 						</form>
 					</div>
 
@@ -177,8 +201,8 @@ get_header();
 					</div> -->
 
 					<div class="filter-btm">
-						<a href="" class="filter-white">Leeg filters</a>
-						<a href="" class="filter-clr">Toon resultaten</a>
+						<a href="javascript:void(0);" class="filter-white reset_filters">Leeg filters</a>
+						<a href="javascript:void(0);" class="filter-clr" id="show_results">Toon resultaten</a>
 					</div>
 				</div>
 			</div>
@@ -186,6 +210,9 @@ get_header();
 	</div>
 </div>
 
+<?php
+get_footer();
+?>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
@@ -195,15 +222,32 @@ get_header();
 		var page = 1;
 		// Post per page
 		var ppp = 6;
-		
+
 		var busy = false;
+
+		jQuery('.reset_filters').click(function() {
+
+			jQuery('#min_vloer').val('');
+			jQuery('#max_vloer').val('');
+			jQuery('input[name="aanbod_type"]:checked').each(function() {
+				jQuery(this).prop('checked', false);
+			});
+		});
 
 		jQuery("#more_posts").on("click", function() {
 			// When btn is pressed.
-			jQuery("#more_posts").attr("disabled", true);
-			var offset = (page * ppp);
+			//jQuery("#more_posts").attr("disabled", true);
+			var offset = (page * ppp) + 1;
+			var search_property = jQuery('#search_property').val();
+			var min_vloer = jQuery('#min_vloer').val();
+			var max_vloer = jQuery('#max_vloer').val();
 
-			var str = '&offset=' + offset + '&ppp=' + ppp + '&action=more_properties_ajax';
+			var aanbod_type = '';
+			jQuery('input[name="aanbod_type"]:checked').each(function() {
+				aanbod_type += this.value + ' ';
+			});
+
+			var str = '&offset=' + offset + '&ppp=' + ppp + '&search_property=' + search_property + '&aanbod_type=' + aanbod_type + '&min_vloer=' + min_vloer + '&max_vloer=' + max_vloer + '&action=more_properties_ajax';
 			jQuery.ajax({
 				type: "POST",
 				dataType: "html",
@@ -218,7 +262,7 @@ get_header();
 						busy = false;
 						//lazyload();
 					} else {
-						jQuery("#more_posts").attr("disabled", true);
+						//jQuery("#more_posts").attr("disabled", true);
 						//jQuery('#loader_image').html('No more nieuws.');
 						busy = true;
 					}
@@ -230,19 +274,97 @@ get_header();
 			});
 			return false;
 		});
-		
+
+		jQuery("#show_results").on("click", function() {
+			busy = false;
+			jQuery('#loader_image').show();
+			jQuery('#search_property').val('');
+			var min_vloer = jQuery('#min_vloer').val();
+			var max_vloer = jQuery('#max_vloer').val();
+			var aanbod_type = '';
+			jQuery('input[name="aanbod_type"]:checked').each(function() {
+				aanbod_type += this.value + ' ';
+			});
+
+			var str = '&min_vloer=' + min_vloer + '&max_vloer=' + max_vloer + '&aanbod_type=' + aanbod_type + '&action=filter_properties_ajax';
+			jQuery.ajax({
+				type: "POST",
+				dataType: "html",
+				url: ajaxUrl,
+				data: str,
+				success: function(data) {
+					var $data = $(data);
+					jQuery('#loader_image').hide();
+					jQuery('.close-btn').click();
+					if ($data.length) {
+						jQuery("#propertiesDataList").html($data);
+					} else {
+						jQuery("#propertiesDataList").html('<div style="color:#F00; text-align:center; padding:30px; width:100%">Geen resultaten</div>');
+						busy = true;
+						jQuery('.totalPropertiesNo').html('0');
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					$loader.html(jqXHR + " :: " + textStatus + " :: " + errorThrown);
+				}
+
+			});
+			return false;
+		});
+
+
+		jQuery("#search_results").on("click", function() {
+			busy = false;
+			searchProperty();
+		});
+
+		jQuery("#search_property").keypress(function(e) {
+			busy = false;
+			if (e.which == 13) {
+				searchProperty();
+			}
+		});
+
+
+
 		jQuery(window).scroll(function() {
 			if ((jQuery(window).scrollTop() + jQuery(window).height() > (jQuery("#propertiesDataList").height() + 600)) && !busy) {
 				busy = true;
-				setTimeout(function() { 
+				setTimeout(function() {
 					jQuery('#loader_image').show();
-					jQuery("#more_posts").click(); 
+					jQuery("#more_posts").click();
 				}, 500);
 			}
 		});
 
 	});
-</script>
 
-<?php
-get_footer();
+	function searchProperty() {
+		var ajaxUrl = "<?php echo admin_url('admin-ajax.php') ?>";
+		jQuery('#loader_image').hide();
+		var search_property = jQuery('#search_property').val();
+		var str = '&search_property=' + search_property + '&action=search_properties_ajax';
+		jQuery.ajax({
+			type: "POST",
+			dataType: "html",
+			url: ajaxUrl,
+			data: str,
+			success: function(data) {
+				var $data = $(data);
+				jQuery('#loader_image').hide();
+				if ($data.length) {
+					jQuery("#propertiesDataList").html($data);
+				} else {
+					jQuery("#propertiesDataList").html('<div style="color:#F00; text-align:center; padding:30px; width:100%">Geen resultaten</div>');
+					jQuery('.totalPropertiesNo').html('0');
+					busy = true;
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				$loader.html(jqXHR + " :: " + textStatus + " :: " + errorThrown);
+			}
+
+		});
+		return false;
+	}
+</script>
